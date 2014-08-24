@@ -15,6 +15,9 @@ menuconfig DEVEL
 	config BINARY_FOLDER
 		string "Binary folder" if DEVEL
 		default ""
+		help
+		  Store built firmware images and filesystem images in this directory.
+		  If not set, uses './bin/$(BOARD)'
 
 	config DOWNLOAD_FOLDER
 		string "Download folder" if DEVEL
