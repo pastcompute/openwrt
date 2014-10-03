@@ -242,14 +242,18 @@ define KernelPackage/iio-ad799x
   KCONFIG:= \
 	CONFIG_AD799X_RING_BUFFER=y \
 	CONFIG_AD799X
+ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),ge,3.16.0)),1)
+  FILES:=$(LINUX_DIR)/drivers/iio/adc/ad799x.ko
+else
   FILES:=$(LINUX_DIR)/drivers/staging/iio/adc/ad799x.ko
+endif
   AUTOLOAD:=$(call AutoLoad,56,ad799x)
 endef
 
 define KernelPackage/iio-ad799x/description
  support for Analog Devices:
  ad7991, ad7995, ad7999, ad7992, ad7993, ad7994, ad7997, ad7998
- i2c analog to digital converters (ADC). WARNING! This driver is still staging!
+ i2c analog to digital converters (ADC).
 endef
 
 $(eval $(call KernelPackage,iio-ad799x))
@@ -751,7 +755,7 @@ define KernelPackage/mvsdio
   AUTOLOAD:=$(call AutoProbe,mvsdio)
 endef
 
-define KernelPacakge/mvsdio/description
+define KernelPackage/mvsdio/description
  Kernel support for the Marvell SDIO controller
 endef
 
@@ -766,7 +770,7 @@ define KernelPackage/pps
   AUTOLOAD:=$(call AutoLoad,17,pps_core,1)
 endef
 
-define KernelPacakge/pps/description
+define KernelPackage/pps/description
  PPS (Pulse Per Second) is a special pulse provided by some GPS
  antennae. Userland can use it to get a high-precision time
  reference.
@@ -784,7 +788,7 @@ define KernelPackage/pps-gpio
   AUTOLOAD:=$(call AutoLoad,18,pps-gpio,1)
 endef
 
-define KernelPacakge/pps-gpio/description
+define KernelPackage/pps-gpio/description
  Support for a PPS source using GPIO. To be useful you must
  also register a platform device specifying the GPIO pin and
  other options, usually in your board setup.
@@ -802,7 +806,7 @@ define KernelPackage/ptp
   AUTOLOAD:=$(call AutoLoad,18,ptp,1)
 endef
 
-define KernelPacakge/ptp/description
+define KernelPackage/ptp/description
  The IEEE 1588 standard defines a method to precisely
  synchronize distributed clocks over Ethernet networks.
 endef
@@ -819,7 +823,7 @@ define KernelPackage/ptp-gianfar
   AUTOLOAD:=$(call AutoProbe,gianfar_ptp)
 endef
 
-define KernelPacakge/ptp-gianfar/description
+define KernelPackage/ptp-gianfar/description
  Kernel module for IEEE 1588 support for Freescale
  Gianfar Ethernet drivers
 endef
