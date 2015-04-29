@@ -522,6 +522,47 @@ endef
 $(eval $(call KernelPackage,rtc-ds1307))
 
 
+define KernelPackage/bmp085-i2c
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=Bosch BMP085 and compatible I2C pressure sensor
+  DEPENDS:= +kmod-i2c-core +kmod-lib-lzo +kmod-regmap
+  KCONFIG:=CONFIG_BMP085_I2C \
+          CONFIG_REGMAP=y \
+          CONFIG_REGMAP_I2C=y
+  FILES:=$(LINUX_DIR)/drivers/misc/bmp085-i2c.ko
+  AUTOLOAD:=$(call AutoProbe,bmp085-i2c)
+endef
+
+define KernelPackage/bmp085-i2c/description
+ Kernel module for Bosch BMP085/BMP180 (and compatible) pressure sensor module
+ chips connected via I2C.
+endef
+
+$(eval $(call KernelPackage,bmp085-i2c))
+
+
+define KernelPackage/bmp085-spi
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=Bosch BMP085 and compatible SPI pressure sensor
+  DEPENDS:= +kmod-i2c-core +kmod-lib-lzo +kmod-regmap
+  KCONFIG:=CONFIG_BMP085_SPI \
+          CONFIG_REGMAP=y \
+          CONFIG_REGMAP_SPI=y \
+          CONFIG_SPI=y \
+          CONFIG_SPI_MASTER=y
+  KCONFIG:=CONFIG_BMP085_SPI
+  FILES:=$(LINUX_DIR)/drivers/misc/bmp085-spi.ko
+  AUTOLOAD:=$(call AutoProbe,bmp085-spi)
+endef
+
+define KernelPackage/bmp085-spi/description
+ Kernel module for Bosch BMP085/BMP180 (and compatible) pressure sensor module
+ chips connected via SPI.
+endef
+
+$(eval $(call KernelPackage,bmp085-spi))
+
+
 define KernelPackage/rtc-ds1672
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Dallas/Maxim DS1672 RTC support
