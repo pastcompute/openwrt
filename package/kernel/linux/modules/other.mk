@@ -989,3 +989,23 @@ define KernelPackage/echo/description
 endef
 
 $(eval $(call KernelPackage,echo))
+
+
+define KernelPackage/bmp085-i2c
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=Bosch BMP085 and compatible I2C pressure sensor
+  DEPENDS:= +kmod-i2c-core +kmod-lib-lzo +kmod-regmap
+  KCONFIG:=CONFIG_BMP085_I2C \
+          CONFIG_REGMAP=y \
+          CONFIG_REGMAP_I2C=y
+  FILES:=$(LINUX_DIR)/drivers/misc/bmp085-i2c.ko
+  AUTOLOAD:=$(call AutoProbe,bmp085-i2c)
+endef
+
+define KernelPackage/bmp085-i2c/description
+ Kernel module for Bosch BMP085/BMP180 (and compatible) pressure sensor module
+ chips connected via I2C.
+endef
+
+$(eval $(call KernelPackage,bmp085-i2c))
+
