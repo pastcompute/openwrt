@@ -22,10 +22,22 @@ static struct ath79_spi_controller_data ath79_spi0_cdata =
 	.cs_line = 0,
 };
 
+// For some reason the default assumes there is another m25p80 yet doesnt set is_flash
 static struct ath79_spi_controller_data ath79_spi1_cdata =
 {
-	.cs_type = ATH79_SPI_CS_TYPE_INTERNAL,
-	.cs_line = 1,
+//	.cs_type = ATH79_SPI_CS_TYPE_INTERNAL,
+//	.cs_line = 1,
+	.cs_type = ATH79_SPI_CS_TYPE_GPIO,
+	.cs_line = 21,  // GPIO 21
+  .is_flash = false
+};
+
+// Lets add a second chip select as a test
+static struct ath79_spi_controller_data ath79_spi2_cdata =
+{
+	.cs_type = ATH79_SPI_CS_TYPE_GPIO,
+	.cs_line = 22
+  .is_flash = false
 };
 
 static struct spi_board_info ath79_spi_info[] = {
@@ -40,8 +52,15 @@ static struct spi_board_info ath79_spi_info[] = {
 		.bus_num	= 0,
 		.chip_select	= 1,
 		.max_speed_hz   = 25000000,
-		.modalias	= "m25p80",
+		.modalias	= "spidev",
 		.controller_data = &ath79_spi1_cdata,
+	}
+	{
+		.bus_num	= 0,
+		.chip_select	= 2,
+		.max_speed_hz   = 25000000,
+		.modalias	= "spidev",
+		.controller_data = &ath79_spi2_cdata,
 	}
 };
 
@@ -50,10 +69,10 @@ static struct ath79_spi_platform_data ath79_spi_data;
 void __init ath79_register_m25p80(struct flash_platform_data *pdata)
 {
 	ath79_spi_data.bus_num = 0;
-	ath79_spi_data.num_chipselect = 1;
+	ath79_spi_data.num_chipselect = 3;
 	ath79_spi0_cdata.is_flash = true;
 	ath79_spi_info[0].platform_data = pdata;
-	ath79_register_spi(&ath79_spi_data, ath79_spi_info, 1);
+	ath79_register_spi(&ath79_spi_data, ath79_spi_info, 3);
 }
 
 static struct flash_platform_data *multi_pdata;
@@ -112,7 +131,7 @@ void __init ath79_register_m25p80_multi(struct flash_platform_data *pdata)
 	multi_pdata = pdata;
 	add_mtd_concat_notifier();
 	ath79_spi_data.bus_num = 0;
-	ath79_spi_data.num_chipselect = 2;
+	ath79_spi_data.num_chipselect = 3;
 	ath79_spi0_cdata.is_flash = true;
-	ath79_register_spi(&ath79_spi_data, ath79_spi_info, 2);
+	ath79_register_spi(&ath79_spi_data, ath79_spi_info, 3);
 }
