@@ -36,7 +36,7 @@ static struct ath79_spi_controller_data ath79_spi1_cdata =
 static struct ath79_spi_controller_data ath79_spi2_cdata =
 {
 	.cs_type = ATH79_SPI_CS_TYPE_GPIO,
-	.cs_line = 22
+	.cs_line = 22,
   .is_flash = false
 };
 
