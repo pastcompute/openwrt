@@ -61,11 +61,14 @@ static struct gpio_keys_button carambola2_gpio_keys[] __initdata = {
 	},
 };
 
+extern void ath79_register_m25p80_and_spidev(struct flash_platform_data *pdata);
+
+
 static void __init carambola2_common_setup(void)
 {
 	u8 *art = (u8 *) KSEG1ADDR(0x1fff0000);
 
-	ath79_register_m25p80(NULL);
+	ath79_register_m25p80_and_spidev(NULL);
 	ath79_register_wmac(art + CARAMBOLA2_CALDATA_OFFSET,
 			    art + CARAMBOLA2_WMAC_MAC_OFFSET);
 

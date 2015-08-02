@@ -40,6 +40,20 @@ static struct ath79_spi_controller_data ath79_spi2_cdata =
   .is_flash = false
 };
 
+static struct ath79_spi_controller_data ath79_spi21_cdata =
+{
+	.cs_type = ATH79_SPI_CS_TYPE_GPIO,
+	.cs_line = 17,
+	.is_flash = false
+};
+
+static struct ath79_spi_controller_data ath79_spi22_cdata =
+{
+	.cs_type = ATH79_SPI_CS_TYPE_GPIO,
+	.cs_line = 21,
+	.is_flash = false
+};
+
 static struct spi_board_info ath79_spi_info[] = {
 	{
 		.bus_num	= 0,
@@ -64,6 +78,30 @@ static struct spi_board_info ath79_spi_info[] = {
 	}
 };
 
+static struct spi_board_info ath79_spiG_info[] = {
+	{
+		.bus_num	= 0,
+		.chip_select	= 0,
+		.max_speed_hz	= 25000000,
+		.modalias	= "m25p80",
+		.controller_data = &ath79_spi0_cdata,
+	},
+	{
+		.bus_num	= 0,
+		.chip_select	= 1,
+		.max_speed_hz   = 25000000,
+		.modalias	= "spidev",
+		.controller_data = &ath79_spi21_cdata,
+	},
+	{
+		.bus_num	= 0,
+		.chip_select	= 2,
+		.max_speed_hz   = 25000000,
+		.modalias	= "spidev",
+		.controller_data = &ath79_spi22_cdata,
+	}
+};
+
 static struct ath79_spi_platform_data ath79_spi_data;
 
 void __init ath79_register_m25p80(struct flash_platform_data *pdata)
@@ -73,6 +111,16 @@ void __init ath79_register_m25p80(struct flash_platform_data *pdata)
 	ath79_spi0_cdata.is_flash = true;
 	ath79_spi_info[0].platform_data = pdata;
 	ath79_register_spi(&ath79_spi_data, ath79_spi_info, 3);
+}
+
+void __init ath79_register_m25p80_and_spidev(struct flash_platform_data *pdata)
+{
+	pr_info("M25P80 and SPIDEV mod...\n");
+	ath79_spi_data.bus_num = 0;
+	ath79_spi_data.num_chipselect = 3;
+	ath79_spi0_cdata.is_flash = true;
+	ath79_spi_info[0].platform_data = pdata;
+	ath79_register_spi(&ath79_spi_data, ath79_spiG_info, 3);
 }
 
 static struct flash_platform_data *multi_pdata;
